@@ -949,6 +949,56 @@ module Php4r
     
     return hash
   end
+  def is_array(var)
+    var.kind_of?(Array) or var.kind_of?(Hash)
+  end
+  def addslashes(str)
+    str.gsub(/['"\\\x0]/,'\\\\\0');
+  end
+  def stripslashes(str)
+    eval("\"#{str}\"")
+  end
+  def str_replace(a,b,c)
+    if a.respond_to?(:each)
+      i = 0
+      ret = c
+      while i < a.length
+        b[i] ||= ''
+        ret = str_replace(a[i],b[i],ret)
+      end
+      return ret
+    else
+      return c.gsub(a,b)
+    end
+  end
+  def preg_replace(a,b,c)
+    if a.respond_to?(:each)
+      i = 0
+      ret = c
+      while i < a.length
+        b[i] ||= ''
+        ret = str_replace(a[i],b[i],ret)
+      end
+      return ret
+    else
+      return c.gsub(eval(a),b)
+    end
+  end
+  def time()
+    Time.now.to_i
+  end
+  def strlen(str)
+    str.length
+  end
+  def range(first_value, limit_value)
+    (first_value..limit_value).to_a
+  end
+  def ord(char)
+    char.to_s.ord
+  end
+  def chr(num)
+    num.chr
+  end
   
   private
   
